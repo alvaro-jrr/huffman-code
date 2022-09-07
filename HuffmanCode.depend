@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1662574712 source:/home/alvaro/Dev/HuffmanCode/main.cpp
+	<iostream>
+	<vector>
+	"Huffman.h"
+	"Frequency.h"
+
+1662574801 /home/alvaro/Dev/HuffmanCode/include/Huffman.h
+	<vector>
+	"Frequency.h"
+
+1662564678 /home/alvaro/Dev/HuffmanCode/include/Frequency.h
+
+1662564725 source:/home/alvaro/Dev/HuffmanCode/src/Frequency.cpp
+	"Frequency.h"
+
+1662574819 source:/home/alvaro/Dev/HuffmanCode/src/Huffman.cpp
+	<iostream>
+	<iomanip>
+	<vector>
+	"Frequency.h"
+	"Huffman.h"
+
