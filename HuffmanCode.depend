@@ -21,3 +21,18 @@
 	"Frequency.h"
 	"Huffman.h"
 
+1662594894 source:/home/alvaro/Dev/huffman-code/main.cpp
+	<iostream>
+	<vector>
+	"Huffman.h"
+	"Frequency.h"
+
+1662601090 /home/alvaro/Dev/huffman-code/include/Huffman.h
+	<vector>
+	"Frequency.h"
+
+1662594894 /home/alvaro/Dev/huffman-code/include/Frequency.h
+
+1662594894 source:/home/alvaro/Dev/huffman-code/src/Frequency.cpp
+	"Frequency.h"
+

@@ -35,8 +35,10 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="include/Frequency.h" />
+		<Unit filename="include/Huffman.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Frequency.cpp" />
+		<Unit filename="src/Huffman.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
