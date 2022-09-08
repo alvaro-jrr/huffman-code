@@ -8,8 +8,11 @@ class Frequency {
         int frequency; // frecuencia
 
     public:
-        // constructor
-        Frequency(char, int);
+        // constructor sin parametros
+        Frequency();
+
+        // constructor con parametros
+        Frequency(char, int = 0);
 
         // establecer caracter
         void setCharacter(char);
@@ -19,6 +22,9 @@ class Frequency {
 
         // establecer frecuencia
         void setFrequency(int);
+
+        // incrementar frecuencia
+        void incrementFrequency();
 
         // obtener frecuencia
         int getFrequency() const;

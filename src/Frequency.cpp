@@ -1,6 +1,11 @@
 #include "Frequency.h"
 
-// constructor
+// constructor sin parametros
+Frequency::Frequency() {
+    setFrequency(0);
+}
+
+// constructor con parametros
 Frequency::Frequency(char character, int frequency) {
     setCharacter(character);
     setFrequency(frequency);
@@ -21,6 +26,11 @@ void Frequency::setFrequency(int frequency) {
     if (frequency >= 0) {
         this->frequency = frequency;
     }
+}
+
+// incrementar frecuencia
+void Frequency::incrementFrequency() {
+    frequency++;
 }
 
 // obtener frecuencia

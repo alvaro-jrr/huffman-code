@@ -5,10 +5,18 @@
 using namespace std;
 
 int main() {
-	string compressTarget = "a fast runner need never be afraid of the dark";
+	Huffman huffman("a fast runner need never be afraid of the dark");
 
-	Huffman huffman(compressTarget);
-	huffman.displayFrequencies();
+    cout << "----- Codigo Huffman -----\n" << endl;
+
+	huffman.displayFrequencyTable();
+	cout << endl;
+
+	huffman.displayTree();
+	cout << endl;
+
+    huffman.displayCodeTable();
+    cout << endl;
 
 	return 0;
 }
