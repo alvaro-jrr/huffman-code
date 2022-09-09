@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <vector>
 #include "Frequency.h"
+#include "Code.h"
 #include "Huffman.h"
 using namespace std;
 
@@ -12,15 +13,21 @@ Huffman::Huffman(string str) {
 
 	// construir arbol
 	buildTree();
+
+	// construir codigos
+	buildCodes();
 }
 
 // constructor
 Huffman::Huffman(vector<Frequency> frequencies) {
-    // establecer frecuencias
-    setFrequencies(frequencies);
+	// establecer frecuencias
+	setFrequencies(frequencies);
 
-    // construir arbol
-    buildTree();
+	// construir arbol
+	buildTree();
+
+	// construir codigos
+	buildCodes();
 }
 
 // generar vector de frecuencias
@@ -79,7 +86,7 @@ void Huffman::shellSort(vector<Frequency> &frequencies) {
 
 // ordenamiento de shell para nodos
 void Huffman::shellSort(vector<Node> &nodes) {
-    int size = nodes.size();
+	int size = nodes.size();
 
 	// ordenar frecuencias
 	for (int gap = size / 2; gap > 0; gap /= 2) {
@@ -104,69 +111,72 @@ void Huffman::shellSort(vector<Node> &nodes) {
 void Huffman::buildTree() {
 	vector<Node> nodes;
 
-    // crear vector de nodos para cada frecuencia
+	// crear vector de nodos para cada frecuencia
 	for (Frequency frequency : frequencies) {
-        // insertar nodo creado a partir de la frecuencia
+		// insertar nodo creado a partir de la frecuencia
 		nodes.push_back(Node(
-			frequency.getCharacter(),
-            frequency.getFrequency()
-		));
+		                    frequency.getCharacter(),
+		                    frequency.getFrequency()
+		                ));
 	}
 
 	// crear arbol
 	while(nodes.size() > 1) {
-        Node subtree;
-        Node *leftSubtree;
-        Node *rightSubtree;
+		Node subtree;
+		Node *leftSubtree;
+		Node *rightSubtree;
 
-        // obtener minimos (subarbol izquierdo y derecho)
-        leftSubtree = new Node(nodes.front());
-        nodes.erase(nodes.begin());
+		// obtener minimos (subarbol izquierdo y derecho)
+		leftSubtree = new Node(nodes.front());
+		nodes.erase(nodes.begin());
 
-        rightSubtree = new Node(nodes.front());
-        nodes.erase(nodes.begin());
+		rightSubtree = new Node(nodes.front());
+		nodes.erase(nodes.begin());
 
-        // crear subarbol a partir de subarbol izq. y der.
-        subtree.data = '*';
-        subtree.key = leftSubtree->key + rightSubtree->key;
-        subtree.left = leftSubtree;
-        subtree.right = rightSubtree;
+		// crear subarbol a partir de subarbol izq. y der.
+		subtree.data = FATHER_ID;
+		subtree.key = leftSubtree->key + rightSubtree->key;
+		subtree.left = leftSubtree;
+		subtree.right = rightSubtree;
 
-        // insertar a vector y reordenar
-        nodes.push_back(subtree);
-        shellSort(nodes);
+		// insertar a vector y reordenar
+		nodes.push_back(subtree);
+		shellSort(nodes);
 	}
 
-    // asignar a raiz del arbol
-    root = new Node(nodes.front());
+	// asignar a raiz del arbol
+	root = new Node(nodes.front());
 }
 
-// mostrar tabla de codigos
-void Huffman::displayCodeTableAux(Node *root, string str) const {
-    // si esta vacio
-    if (!root) return;
+// construir codigos
+void Huffman::buildCodes() {
+	buildCodes(root, "");
+}
 
-    // si no es raiz
-    if (root->data != '*') {
-        cout << setw(COLUMN_INDENT) << root->data << str << endl;
-    }
+// construir codigos
+void Huffman::buildCodes(Node *root, string str) {
+	// si esta vacio
+	if (!root) return;
 
-    displayCodeTableAux(root->left, str + "0");
-    displayCodeTableAux(root->right, str + "1");
+	// si no es padre agregrar codigo
+	if (root->data != FATHER_ID) codes.push_back(Code(root->data, str));
+
+	buildCodes(root->left, str + "0");
+	buildCodes(root->right, str + "1");
 }
 
 // mostrar arbol
-void Huffman::displayTreeAux(Node *root, int indent) const {
-    if (root) {
-        // graficar siguiente nivel derecho
-        displayTreeAux(root->right, indent + 8);
+void Huffman::displayTree(Node *root, int indent) const {
+	if (root) {
+		// graficar siguiente nivel derecho
+		displayTree(root->right, indent + 8);
 
-        // mostrar elemento
-        cout << setw(indent) << " " << root->key << " [" << root->data << "]" << endl;
+		// mostrar elemento
+		cout << setw(indent) << " " << root->key << " [" << root->data << "]" << endl;
 
-        // graficar siguiente nivel izquierdo
-        displayTreeAux(root->left, indent + 8);
-    }
+		// graficar siguiente nivel izquierdo
+		displayTree(root->left, indent + 8);
+	}
 }
 
 // establecer frecuencias
@@ -197,13 +207,17 @@ void Huffman::displayFrequencyTable() const {
 
 // mostrar codigos
 void Huffman::displayCodeTable() const {
-    // mostrar cabecera
+	// mostrar cabecera
 	cout << left << setw(COLUMN_INDENT) << "Caracter" << "Codigo" << endl;
 
-    displayCodeTableAux(root, "");
+	// mostrar cada codigo
+	for (Code code : codes) {
+		cout << setw(COLUMN_INDENT) << code.getCharacter()
+		     << code.getCode() << endl;
+	}
 }
 
 // mostrar arbol
 void Huffman::displayTree() const {
-    displayTreeAux(root, 0);
+	displayTree(root, 0);
 }

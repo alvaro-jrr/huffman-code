@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Frequency.h"
+#include "Code.h"
 
 // clase Huffman
 class Huffman {
@@ -33,9 +34,14 @@ class Huffman {
             }
         };
 
+        // Estructuras
         Node *root; // raiz del arbol
         std::vector<Frequency> frequencies; // frecuencias
-        static const int COLUMN_INDENT = 10; // sangria de tabla
+        std::vector<Code> codes; // codigos
+
+        // Constantes
+        static const int COLUMN_INDENT = 10; // sangria de columnas
+        static const char FATHER_ID = '*'; // identificador de nodo padre
 
         // generar vector de frecuencias
         std::vector<Frequency> generateFrequencyTable(std::string);
@@ -49,11 +55,14 @@ class Huffman {
         // construir arbol
         void buildTree();
 
-        // mostrar tabla de codigos
-        void displayCodeTableAux(Node *, std::string) const;
+        // construir codigos
+        void buildCodes();
+
+        // construir codigos
+        void buildCodes(Node *, std::string);
 
         // mostrar arbol
-        void displayTreeAux(Node *, int) const;
+        void displayTree(Node *, int) const;
 
     public:
         // constructor
