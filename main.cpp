@@ -1,7 +1,5 @@
 #include <iostream>
-#include <vector>
 #include "Huffman.h"
-#include "Frequency.h"
 using namespace std;
 
 int main() {

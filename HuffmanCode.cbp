@@ -34,9 +34,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Code.h" />
 		<Unit filename="include/Frequency.h" />
 		<Unit filename="include/Huffman.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Code.cpp" />
 		<Unit filename="src/Frequency.cpp" />
 		<Unit filename="src/Huffman.cpp" />
 		<Extensions />
