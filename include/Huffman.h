@@ -2,8 +2,8 @@
 #define HUFFMAN_H
 
 #include <vector>
-#include "Frequency.h"
 #include "Code.h"
+#include "Frequency.h"
 
 // clase Huffman
 class Huffman {
@@ -19,10 +19,16 @@ class Huffman {
             Node() : left(nullptr), right(nullptr) { }
 
             // constructor con parametros
-            Node(char data, int key) {
+            Node(
+                char data,
+                int key,
+                Node *left = nullptr,
+                Node *right = nullptr
+            ) {
                 this->data = data;
                 this->key = key;
-                left = right = nullptr;
+                this->left = left;
+                this->right = right;
             }
 
             // constructor a partir de otro nodo
@@ -34,23 +40,21 @@ class Huffman {
             }
         };
 
-        // Estructuras
-        Node *root; // raiz del arbol
-        std::vector<Frequency> frequencies; // frecuencias
-        std::vector<Code> codes; // codigos
-
         // Constantes
         static const int COLUMN_INDENT = 10; // sangria de columnas
         static const char FATHER_ID = '*'; // identificador de nodo padre
 
+        // Atributos
+        Node *root; // raiz del arbol
+        std::vector<Frequency> frequencies; // frecuencias
+        std::vector<Code> codes; // codigos
+        std::string encoded; // texto codificado
+
         // generar vector de frecuencias
-        std::vector<Frequency> generateFrequencyTable(std::string);
+        std::vector<Frequency> generateFrequencies(std::string);
 
         // ordenamiento de shell para frecuencias
-        void shellSort(std::vector<Frequency> &);
-
-        // ordenamiento de shell para nodos
-        void shellSort(std::vector<Node> &);
+        std::vector<Frequency> shellSort(std::vector<Frequency>);
 
         // construir arbol
         void buildTree();
@@ -61,27 +65,30 @@ class Huffman {
         // construir codigos
         void buildCodes(Node *, std::string);
 
+        // obtener codigo de un caracter
+        std::string codeOf(char) const;
+
+        // codificar texto
+        std::string encode(std::string) const;
+
         // mostrar arbol
         void displayTree(Node *, int) const;
 
     public:
-        // constructor
+        // constructor a partir de una cadena
         Huffman(std::string);
 
-        // constructor
-        Huffman(std::vector<Frequency>);
+        // codificar texto
+        std::string encode() const;
 
-        // establecer frecuencias
-        void setFrequencies(std::vector<Frequency>);
+        // decodificar texto
+        std::string decode() const;
 
-        // obtener frecuencias
-        std::vector<Frequency> getFrequencies() const;
+        // mostrar frecuencias
+        void displayFrequencies() const;
 
-        // mostrar tabla de frecuencias
-        void displayFrequencyTable() const;
-
-        // mostrar tabla de codigos
-        void displayCodeTable() const;
+        // mostrar codigos
+        void displayCodes() const;
 
         // mostrar arbol
         void displayTree() const;

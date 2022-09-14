@@ -1,41 +1,33 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include "Frequency.h"
 #include "Code.h"
+#include "Frequency.h"
 #include "Huffman.h"
+#include "PriorityQueue.h"
 using namespace std;
 
 // constructor
-Huffman::Huffman(string str) {
-	// establecer frecuencias
-	setFrequencies(generateFrequencyTable(str));
+Huffman::Huffman(string text) {
+	// generar y establecer frecuencias
+    frequencies = shellSort(generateFrequencies(text));
 
 	// construir arbol
 	buildTree();
 
 	// construir codigos
 	buildCodes();
-}
 
-// constructor
-Huffman::Huffman(vector<Frequency> frequencies) {
-	// establecer frecuencias
-	setFrequencies(frequencies);
-
-	// construir arbol
-	buildTree();
-
-	// construir codigos
-	buildCodes();
+	// establecer texto codificado
+	encoded = encode(text);
 }
 
 // generar vector de frecuencias
-vector<Frequency> Huffman::generateFrequencyTable(string str) {
+vector<Frequency> Huffman::generateFrequencies(string text) {
 	vector<Frequency> frequencies;
 
-	// recorrer cada caracter de la cadena
-	for (char currentChar : str) {
+	// recorrer cada caracter del texto
+	for (char currentChar : text) {
 		int charIndex = 0;
 		bool found = false;
 
@@ -62,7 +54,7 @@ vector<Frequency> Huffman::generateFrequencyTable(string str) {
 }
 
 // ordenamiento de shell para frecuencias
-void Huffman::shellSort(vector<Frequency> &frequencies) {
+vector<Frequency> Huffman::shellSort(vector<Frequency> frequencies) {
 	int size = frequencies.size();
 
 	// ordenar frecuencias
@@ -82,70 +74,49 @@ void Huffman::shellSort(vector<Frequency> &frequencies) {
 			}
 		}
 	}
-}
 
-// ordenamiento de shell para nodos
-void Huffman::shellSort(vector<Node> &nodes) {
-	int size = nodes.size();
-
-	// ordenar frecuencias
-	for (int gap = size / 2; gap > 0; gap /= 2) {
-		// dividir en grupos
-		for (int i = gap; i < size; i++) {
-			// ordenar grupos
-			for (
-			    int j = i - gap;
-			    j >= 0 && nodes[j + gap].key < nodes[j].key;
-			    j -= gap
-			) {
-				// intercambiar posiciones
-				Node temp = nodes[j];
-				nodes[j] = nodes[j + gap];
-				nodes[j + gap] = temp;
-			}
-		}
-	}
+	return frequencies;
 }
 
 // construir arbol
 void Huffman::buildTree() {
-	vector<Node> nodes;
+    PriorityQueue<Node> priorityQueue;
 
 	// crear vector de nodos para cada frecuencia
 	for (Frequency frequency : frequencies) {
-		// insertar nodo creado a partir de la frecuencia
-		nodes.push_back(Node(
-		                    frequency.getCharacter(),
-		                    frequency.getFrequency()
-		                ));
+        Node newNode(frequency.getCharacter(), frequency.getFrequency());
+        int priority = frequency.getFrequency();
+
+        // insertar en cola de prioridad
+        priorityQueue.enqueue(newNode, priority);
 	}
 
 	// crear arbol
-	while(nodes.size() > 1) {
-		Node subtree;
-		Node *leftSubtree;
-		Node *rightSubtree;
+	while(priorityQueue.getLength() > 1) {
+        // obtener minimos
+        Node left = priorityQueue.front();
+        priorityQueue.dequeue();
 
-		// obtener minimos (subarbol izquierdo y derecho)
-		leftSubtree = new Node(nodes.front());
-		nodes.erase(nodes.begin());
+        Node right = priorityQueue.front();
+        priorityQueue.dequeue();
 
-		rightSubtree = new Node(nodes.front());
-		nodes.erase(nodes.begin());
+        // crear subarbol a partir de minimos
+        int subtreeKey = left.key + right.key;
 
-		// crear subarbol a partir de subarbol izq. y der.
-		subtree.data = FATHER_ID;
-		subtree.key = leftSubtree->key + rightSubtree->key;
-		subtree.left = leftSubtree;
-		subtree.right = rightSubtree;
+        Node subtree(
+            FATHER_ID,
+            subtreeKey,
+            new Node(left),
+            new Node(right)
+        );
 
-		// insertar a vector y reordenar
-		nodes.push_back(subtree);
-		shellSort(nodes);
+        // agregar subarbol a cola de prioridad
+        priorityQueue.enqueue(subtree, subtreeKey);
 	}
 
 	// asignar a raiz del arbol
-	root = new Node(nodes.front());
+	root = new Node(priorityQueue.front());
+	priorityQueue.dequeue();
 }
 
 // construir codigos
@@ -154,15 +125,38 @@ void Huffman::buildCodes() {
 }
 
 // construir codigos
-void Huffman::buildCodes(Node *root, string str) {
+void Huffman::buildCodes(Node *root, string code) {
 	// si esta vacio
 	if (!root) return;
 
-	// si no es padre agregrar codigo
-	if (root->data != FATHER_ID) codes.push_back(Code(root->data, str));
+	// si no es padre agregar codigo
+	if (root->data != FATHER_ID) codes.push_back(Code(root->data, code));
 
-	buildCodes(root->left, str + "0");
-	buildCodes(root->right, str + "1");
+	buildCodes(root->left, code + "0");
+	buildCodes(root->right, code + "1");
+}
+
+// obtener codigo de un caracter
+string Huffman::codeOf(char character) const {
+    // buscar en tabla de codigos
+    for (Code code : codes) {
+        if (code.getCharacter() == character) {
+            return code.getCode();
+        }
+    }
+
+    return "";
+}
+
+// devolver texto codificado
+string Huffman::encode(string text) const {
+    string encoded = "";
+
+    for (char character : text) {
+        encoded.append(codeOf(character));
+    }
+
+    return encoded;
 }
 
 // mostrar arbol
@@ -179,22 +173,37 @@ void Huffman::displayTree(Node *root, int indent) const {
 	}
 }
 
-// establecer frecuencias
-void Huffman::setFrequencies(vector<Frequency> frequencies) {
-	// ordenar por frecuencia de caracteres
-	shellSort(frequencies);
-
-	// establecer frecuencias
-	this->frequencies = frequencies;
+// obtener texto codificado
+string Huffman::encode() const {
+	return encoded;
 }
 
-// obtener frecuencias
-vector<Frequency> Huffman::getFrequencies() const {
-	return frequencies;
+// decodificar texto
+string Huffman::decode() const {
+    string decoded = "";
+    Node *currentRoot = root;
+
+    // recorrer cada caracter de cadena codificada
+    for (char character : encoded) {
+        // determinar subarbol
+        if (character == '0') {
+            currentRoot = currentRoot->left;
+        } else {
+            currentRoot = currentRoot->right;
+        }
+
+        // agregar caracter si es nodo terminal
+        if (!currentRoot->left && !currentRoot->right) {
+            decoded += currentRoot->data;
+            currentRoot = root;
+        }
+    }
+
+    return decoded;
 }
 
 // mostrar tabla de frecuencias
-void Huffman::displayFrequencyTable() const {
+void Huffman::displayFrequencies() const {
 	// mostrar cabecera
 	cout << left << setw(COLUMN_INDENT) << "Caracter" << "Frecuencia" << endl;
 
@@ -206,7 +215,7 @@ void Huffman::displayFrequencyTable() const {
 }
 
 // mostrar codigos
-void Huffman::displayCodeTable() const {
+void Huffman::displayCodes() const {
 	// mostrar cabecera
 	cout << left << setw(COLUMN_INDENT) << "Caracter" << "Codigo" << endl;
 

@@ -3,18 +3,21 @@
 using namespace std;
 
 int main() {
-	Huffman huffman("a fast runner need never be afraid of the dark");
-
     cout << "----- Codigo Huffman -----\n" << endl;
 
-	huffman.displayFrequencyTable();
+	Huffman huffman("a fast runner need never be afraid of the dark");
+
+	huffman.displayFrequencies();
 	cout << endl;
 
 	huffman.displayTree();
 	cout << endl;
 
-    huffman.displayCodeTable();
+    huffman.displayCodes();
     cout << endl;
+
+    cout << huffman.encode() << "\n" << endl;
+    cout << huffman.decode() << endl;
 
 	return 0;
 }
