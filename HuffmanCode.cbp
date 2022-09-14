@@ -37,6 +37,7 @@
 		<Unit filename="include/Code.h" />
 		<Unit filename="include/Frequency.h" />
 		<Unit filename="include/Huffman.h" />
+		<Unit filename="include/PriorityQueue.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Code.cpp" />
 		<Unit filename="src/Frequency.cpp" />
