@@ -43,14 +43,8 @@ class PriorityQueue {
 		// obtener minimo
 		ElementType min() const;
 
-		// obtener maximo
-		ElementType max() const;
-
 		// remover minimo
 		void removeMin();
-
-		// remover maximo
-		void removeMax();
 
 		// vaciar
 		void erase();
@@ -126,20 +120,6 @@ ElementType PriorityQueue<ElementType>::min() const {
 	return head->element;
 }
 
-// obtener maximo
-template <typename ElementType>
-ElementType PriorityQueue<ElementType>::max() const {
-    if (isEmpty()) {
-		// devolver basura
-		ElementType *temp = new(ElementType);
-		ElementType garbage = *temp;
-		delete temp;
-		return garbage;
-	}
-
-	return tail->element;
-}
-
 // remover minimo
 template <typename ElementType>
 void PriorityQueue<ElementType>::removeMin() {
@@ -154,33 +134,6 @@ void PriorityQueue<ElementType>::removeMin() {
 
 	// si cola esta vacia
 	if (isEmpty()) tail = nullptr;
-}
-
-// remover maximo
-template <typename ElementType>
-void PriorityQueue<ElementType>::removeMax() {
-    if (isEmpty()) return;
-
-    Node *ptr = tail;
-
-    if (head == tail) {
-        head = tail = nullptr;
-    } else {
-        Node *prev;
-        prev = ptr = head;
-
-        while(ptr->next) {
-            prev = ptr;
-            ptr = ptr->next;
-        }
-
-        // actualizar ultimo elemento
-        tail = prev;
-        prev->next = nullptr;
-    }
-
-    // disminuir longitud
-    length--;
 }
 
 // vaciar
