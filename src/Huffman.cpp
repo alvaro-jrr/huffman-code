@@ -88,17 +88,17 @@ void Huffman::buildTree() {
         int priority = frequency.getFrequency();
 
         // insertar en cola de prioridad
-        priorityQueue.enqueue(newNode, priority);
+        priorityQueue.insert(newNode, priority);
 	}
 
 	// crear arbol
 	while(priorityQueue.getLength() > 1) {
         // obtener minimos
-        Node left = priorityQueue.front();
-        priorityQueue.dequeue();
+        Node left = priorityQueue.min();
+        priorityQueue.removeMin();
 
-        Node right = priorityQueue.front();
-        priorityQueue.dequeue();
+        Node right = priorityQueue.min();
+        priorityQueue.removeMin();
 
         // crear subarbol a partir de minimos
         int subtreeKey = left.key + right.key;
@@ -111,12 +111,12 @@ void Huffman::buildTree() {
         );
 
         // agregar subarbol a cola de prioridad
-        priorityQueue.enqueue(subtree, subtreeKey);
+        priorityQueue.insert(subtree, subtreeKey);
 	}
 
 	// asignar a raiz del arbol
-	root = new Node(priorityQueue.front());
-	priorityQueue.dequeue();
+	root = new Node(priorityQueue.min());
+	priorityQueue.removeMin();
 }
 
 // construir codigos
