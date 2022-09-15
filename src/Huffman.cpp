@@ -7,7 +7,7 @@
 #include "PriorityQueue.h"
 using namespace std;
 
-// constructor
+// constructor a partir de una cadena
 Huffman::Huffman(string text) {
 	// generar y establecer frecuencias
     frequencies = shellSort(generateFrequencies(text));
@@ -20,6 +20,32 @@ Huffman::Huffman(string text) {
 
 	// establecer texto codificado
 	encoded = encode(text);
+}
+
+// constructor a partir de frecuencias
+Huffman::Huffman(vector<Frequency> frequencies) {
+	// establecer frecuencias
+	this->frequencies = shellSort(frequencies);
+
+	// construir arbol
+	buildTree();
+
+	// construir codigos
+	buildCodes();
+
+	// establecer cadena vacia como texto codificado (no se tiene texto original)
+	encoded = "";
+}
+
+// constructor a partir de otro arbol de Huffman
+Huffman::Huffman(const Huffman &otherHuffman) {
+    // establecer atributos
+    frequencies = otherHuffman.getFrequencies();
+    codes = otherHuffman.getCodes();
+    encoded = otherHuffman.encode();
+
+    // construir arbol
+    buildTree();
 }
 
 // generar vector de frecuencias
@@ -200,6 +226,16 @@ string Huffman::decode() const {
     }
 
     return decoded;
+}
+
+// obtener frecuencias
+vector<Frequency> Huffman::getFrequencies() const {
+	return frequencies;
+}
+
+// obtener codigos
+vector<Code> Huffman::getCodes() const {
+	return codes;
 }
 
 // mostrar tabla de frecuencias

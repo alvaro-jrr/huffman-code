@@ -1,23 +1,29 @@
 #include <iostream>
+#include <string>
 #include "Huffman.h"
 using namespace std;
 
 int main() {
     cout << "----- Codigo Huffman -----\n" << endl;
 
-	Huffman huffman("a fast runner need never be afraid of the dark");
+    cout << "Texto a Comprimir: ";
+    string text;
+    getline(cin, text);
 
-	huffman.displayFrequencies();
-	cout << endl;
+    // construir arbol de huffman
+    Huffman huffman(text);
 
-	huffman.displayTree();
-	cout << endl;
-
-    huffman.displayCodes();
+    cout << "# Tabla de Frecuencias\n" << endl;
+    huffman.displayFrequencies();
     cout << endl;
 
-    cout << huffman.encode() << "\n" << endl;
-    cout << huffman.decode() << endl;
+    cout << "# Arbol de Huffman\n" << endl;
+    huffman.displayTree();
+    cout << endl;
+
+    cout << "# Tabla de Codigos\n" << endl;
+    huffman.displayCodes();
+    cout << endl;
 
 	return 0;
 }

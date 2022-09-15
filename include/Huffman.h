@@ -78,11 +78,23 @@ class Huffman {
         // constructor a partir de una cadena
         Huffman(std::string);
 
+        // constructor a partir de frecuencias
+        Huffman(std::vector<Frequency>);
+
+        // constructor a partir de otro arbol de Huffman
+        Huffman(const Huffman &);
+
         // codificar texto
         std::string encode() const;
 
         // decodificar texto
         std::string decode() const;
+
+        // obtener frecuencias
+        std::vector<Frequency> getFrequencies() const;
+
+        // obtener codigos
+        std::vector<Code> getCodes() const;
 
         // mostrar frecuencias
         void displayFrequencies() const;
