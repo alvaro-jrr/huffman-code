@@ -38,10 +38,12 @@
 		<Unit filename="include/Frequency.h" />
 		<Unit filename="include/Huffman.h" />
 		<Unit filename="include/PriorityQueue.h" />
+		<Unit filename="include/utils.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Code.cpp" />
 		<Unit filename="src/Frequency.cpp" />
 		<Unit filename="src/Huffman.cpp" />
+		<Unit filename="src/utils.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
