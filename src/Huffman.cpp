@@ -187,16 +187,24 @@ string Huffman::encode(string text) const {
 
 // mostrar arbol
 void Huffman::displayTree(Node *root, int indent) const {
-	if (root) {
-		// graficar siguiente nivel derecho
-		displayTree(root->right, indent + 8);
+    if (!root) return;
 
-		// mostrar elemento
-		cout << setw(indent) << " " << root->key << " [" << root->data << "]" << endl;
+	// graficar siguiente nivel derecho
+	displayTree(root->right, indent + 8);
 
-		// graficar siguiente nivel izquierdo
-		displayTree(root->left, indent + 8);
+	// mostrar elemento
+	cout << setw(indent) << " " << root->key;
+
+	if (root->data) {
+        cout << " [" << root->data << "]";
+	} else {
+        cout << " *";
 	}
+
+	cout << endl;
+
+	// graficar siguiente nivel izquierdo
+	displayTree(root->left, indent + 8);
 }
 
 // obtener texto codificado

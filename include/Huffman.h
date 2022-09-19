@@ -42,7 +42,7 @@ class Huffman {
 
         // Constantes
         static const int COLUMN_INDENT = 10; // sangria de columnas
-        static const char FATHER_ID = '*'; // identificador de nodo padre
+        static const char FATHER_ID = '\0'; // identificador de nodo padre
 
         // Atributos
         Node *root; // raiz del arbol

@@ -7,7 +7,7 @@
 using namespace std;
 
 // desplegar opciones
-void displayOptions(string options[], int size) {
+void displayOptions(string *options, int size) {
     int option;
 
     // mostrar opcion con su numero correspondiente
@@ -66,4 +66,3 @@ string readFile(string fileName) {
 
     return content;
 }
-

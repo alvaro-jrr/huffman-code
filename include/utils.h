@@ -1,7 +1,7 @@
 #include <string>
 
 // desplegar opciones
-void displayOptions(std::string[], int);
+void displayOptions(std::string *, int);
 
 // obtener numero
 int getNumber(std::string);
