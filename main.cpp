@@ -1,29 +1,72 @@
 #include <iostream>
 #include <string>
+#include "utils.h"
 #include "Huffman.h"
 using namespace std;
 
 int main() {
-    cout << "----- Codigo Huffman -----\n" << endl;
+	// opciones del programa
+	string options[] = {
+		"Comprimir Archivo",
+		"Salir"
+	};
 
-    cout << "Texto a Comprimir: ";
-    string text;
-    getline(cin, text);
+	int optionsLength = 2;
 
-    // construir arbol de huffman
-    Huffman huffman(text);
+	// control del programa
+	bool shouldContinue = true;
 
-    cout << "# Tabla de Frecuencias\n" << endl;
-    huffman.displayFrequencies();
-    cout << endl;
+	do {
+		cout << "----- Codigo Huffman -----\n" << endl;
 
-    cout << "# Arbol de Huffman\n" << endl;
-    huffman.displayTree();
-    cout << endl;
+		// mostrar opciones
+		displayOptions(options, optionsLength);
+		cout << endl;
 
-    cout << "# Tabla de Codigos\n" << endl;
-    huffman.displayCodes();
-    cout << endl;
+		// pedir y leer opcion
+		int option = getOption("Opcion: ", 1, optionsLength);
+		cout << endl;
+
+		switch(option) {
+            case 1: {
+                cin.ignore();
+
+                // pedir y leer nombre de archivo
+                cout << "Nombre de Archivo: ";
+                string fileName;
+                getline(cin, fileName);
+                cout << endl;
+
+                // obtener contenido
+                string content = readFile(fileName);
+
+                // construir arbol de huffman
+                Huffman huffman(content);
+
+                cout << "# Tabla de Frecuencias\n" << endl;
+                huffman.displayFrequencies();
+                cout << endl;
+
+                cout << "# Arbol de Huffman\n" << endl;
+                huffman.displayTree();
+                cout << endl;
+
+                cout << "# Tabla de Codigos\n" << endl;
+                huffman.displayCodes();
+                cout << endl;
+                break;
+            }
+
+            case 2:
+                shouldContinue = false;
+                break;
+
+            default:
+                cout << "Opcion invalida" << endl;
+		}
+
+		cout << endl;
+	} while(shouldContinue);
 
 	return 0;
 }
